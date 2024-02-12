@@ -77,8 +77,7 @@ def gaussian_quadrature(f, a, b, degree):
 
 
 ########################################################################################   
-# GIVING Wrong answer. Check later
-import numpy as np
+# Check later
 
 def legendre_gauss_nodes_weights(degree, tolerance=1e-15, max_iterations=100):
     # Initial guesses for the roots of the Legendre polynomial
@@ -131,7 +130,7 @@ def solve_rk4(f, x0, y0, h, xf):
 
     return x_values, y_values
 
-
+#ALternate RK4
 def RK( f, x0, y0, xf, st):
     
     x = [x0]
@@ -152,7 +151,7 @@ def RK( f, x0, y0, xf, st):
 
 
 
-def crank_nicolson_solver(initial_condition, alpha, x_max, t_max, num_x, num_t):
+def crank_nicolson(initial_condition, alpha, x_max, t_max, num_x, num_t):
     delta_x = x_max / (num_x - 1)
     delta_t = t_max / (num_t - 1)
     
@@ -190,7 +189,7 @@ def crank_nicolson_solver(initial_condition, alpha, x_max, t_max, num_x, num_t):
 def initialize_grid(nx, ny):
     return np.zeros((nx, ny))
 
-def solve_poisson_equation(u, x, y, nx, ny, dx, dy, num_iterations):
+def poisson_equation(u, x, y, nx, ny, dx, dy, num_iterations):
     for _ in range(num_iterations):
         for i in range(1, nx - 1):
             for j in range(1, ny - 1):
@@ -211,7 +210,7 @@ def save_solution_table(u, x, y, nx, ny, filename):
             for j in range(ny):
                 file.write(f"{x[i, j]:.2f}\t{y[i, j]:.2f}\t{u[i, j]:.6f}\n")
 
-def plot_3d_solution(x, y, u):
+def plot_3d(x, y, u):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     X, Y = np.meshgrid(x, y)
@@ -227,3 +226,6 @@ def plot_3d_solution(x, y, u):
     ax.set_zlabel('u(x, y)')
     plt.title('3D Plot of the Solution to Poisson\'s Equation')
     plt.show()
+
+
+#######################################################################################################################################################################################
