@@ -151,34 +151,36 @@ def power_method(A, it):
 	
 	return eigenvalue, eigenvector
 
-def Power_method(A, x0, eps):
-    i = 0
-    lam0 = 1
-    lam1 = 0
-    while abs(lam1-lam0) >= eps:
-        #print("error=",abs(lam1-lam0))
-        if i != 0:
-            lam0 = lam1
-        
-        Ax0 = matrix_multiplication(A,x0)
-        AAx0 = matrix_multiplication(A,Ax0)
-        #print("Ax0=",Ax0)
-        #print("AAx0=",AAx0)
-        dotU = inner_product(AAx0,Ax0)
-        dotL = inner_product(Ax0,Ax0)
-        #print("U=",dotU)
-        #print("L=",dotL)
-        lam1 = dotU/dotL
-        
-        x0 = Ax0
-        i = i+1
-        #print("i=",i)
-        
-        #print("eigenvalue=",lam1)
-        ev = power_normalize(x0)
-        #print ("eigenvector=",ev)
-    return lam1, ev
+def acceptance_rejection(target_pdf, initial_pdf=None, n_samples=100000, range_start=0, range_end=1):
 
+    if initial_pdf is None:
+        initial_pdf = lambda x: 1  # Uniform distribution by default
+
+    # Find c by evaluating the ratio at the highest value within the range
+    x_values = np.linspace(range_start, range_end, 1000)
+    
+    max_ratio = max(target_pdf(x) / initial_pdf(x) for x in x_values)
+    print("c =", max_ratio)
+    
+    samples = []
+    success_count = 0
+
+    for _ in range(n_samples):
+        # Sample from the initial distribution within the specified range
+        x = np.random.uniform(range_start, range_end)
+
+        # Sample from uniform distribution for acceptance
+        u = np.random.rand()
+
+        # Acceptance condition
+        if u <= target_pdf(x) / (max_ratio * initial_pdf(x)):
+            samples.append(x)
+            success_count += 1
+
+    success_probability = success_count / n_samples
+    average_iterations = 1 / success_probability if success_probability != 0 else float('inf')
+
+    return samples, success_probability, average_iterations
 
 
 ########################################################################################################################################
